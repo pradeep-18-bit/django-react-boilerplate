@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  backend:
+    image: pradeep065/django-react-backend:latest
+    container_name: django-backend
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    image: pradeep065/django-react-frontend:latest
+    container_name: react-frontend
+    ports:
+      - "80:80"
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
