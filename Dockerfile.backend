@@ -12,16 +12,16 @@ RUN apt-get update && \
 # Fix for django-allauth and legacy dependencies
 RUN pip install --upgrade pip==23.2.1 setuptools==68.2.2 wheel
 
-# Copy only requirements first (enables Docker layer caching)
-COPY requirements.txt .
+# Copy only runtime requirements first (enables Docker layer caching)
+COPY requirements-prod.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-prod.txt
 
 # Copy project files
 COPY . .
 
-# Collect static files (optional)
+# Collect static files (optional, won't fail build)
 RUN python manage.py collectstatic --noinput || true
 
 # Expose the backend port
